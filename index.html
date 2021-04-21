@@ -11,6 +11,7 @@
   <title>Fancy Todo</title>
 </head>
 <body>
+  <!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Fancy Todo</a>
@@ -34,50 +35,62 @@
       </div>
     </div>
   </nav>
+  <!-- end of navbar -->
   
+  <!-- login form -->
   <div id="login" class="mt-5">
-    <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;" id="formLogin">
+    <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;">
       <label for="login" class="form-label ms-auto me-auto mt-2 mb-2 px-2">Login</label>
-      <div class="mb-3 px-3">
-        <label for="email-address" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="inputEmailLogin" placeholder="name@example.com">
-      </div>
-      <div class="mb-3 px-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="inputPasswordLogin">
-      </div>
-      <button type="submit" class="btn btn-primary mt-2" id="LoginSubmit">Login</button>
+      <form id="formLogin" class="mb-3">
+        <div class="mb-3 px-3">
+          <label for="email-address" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="inputEmailLogin" placeholder="name@example.com">
+        </div>
+        <div class="mb-3 px-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="inputPasswordLogin">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-2" id="LoginSubmit">Login</button>
+        </div>
+      </form>
     </div>
   </div>
+  <!-- end of login form -->
   
+  <!-- register form -->
   <div id="register" class="mt-5">
     <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;" id="formRegister">
       <label for="register" class="form-label ms-auto me-auto mt-2 mb-2 px-2">Register</label>
-      <div class="mb-3 px-3">
-        <label for="email-address" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="inputEmailRegister" placeholder="name@example.com">
-      </div>
-      <div class="mb-3 px-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="inputPasswordRegister">
-      </div>
-      <button type="submit" class="btn btn-primary mt-2" id="RegisterSubmit">Register</button>
+      <form id="formRegister" class="mb-3">
+        <div class="mb-3 px-3">
+          <label for="email-address" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="inputEmailRegister" placeholder="name@example.com">
+        </div>
+        <div class="mb-3 px-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="inputPasswordRegister">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-2" id="RegisterSubmit">Register</button>
+        </div>
+      </form>
     </div> 
   </div>
+  <!-- end of login form -->
 
-  <div id="todos" class="mt-5">
-    <div class="card mt-3 mb-3 ms-auto me-auto" style="width: 18rem;" id="todoList">
-      <div class="card-header text-center bg-info text-black">
-        Todos
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">An item</li>
-        <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li>
-      </ul>
-    </div>
+  <!-- button add todo -->
+  <div class="text-center">
+    <button type="button" class="btn btn-primary btn-lg mt-3 mb-3 text-center" id="btn-add-todo">Add New Todo</button>
   </div>
+  <!-- end of button add todo -->
+
+  <!-- todo list -->
+  <div class="card" id="todoList">
+  </div>
+  <!-- end of todo list -->
     
+
   <script 
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" 
