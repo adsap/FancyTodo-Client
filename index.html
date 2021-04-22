@@ -51,7 +51,7 @@
           <input type="password" class="form-control" id="inputPasswordLogin">
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-primary mt-2" id="LoginSubmit">Login</button>
+          <button type="submit" class="btn btn-primary mt-2" id="loginSubmit">Login</button>
         </div>
       </form>
     </div>
@@ -60,7 +60,7 @@
   
   <!-- register form -->
   <div id="register" class="mt-5">
-    <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;" id="formRegister">
+    <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;">
       <label for="register" class="form-label ms-auto me-auto mt-2 mb-2 px-2">Register</label>
       <form id="formRegister" class="mb-3">
         <div class="mb-3 px-3">
@@ -72,7 +72,7 @@
           <input type="password" class="form-control" id="inputPasswordRegister">
         </div>
         <div class="text-center">
-          <button type="submit" class="btn btn-primary mt-2" id="RegisterSubmit">Register</button>
+          <button type="submit" class="btn btn-primary mt-2" id="registerSubmit">Register</button>
         </div>
       </form>
     </div> 
@@ -89,6 +89,66 @@
   <div class="card" id="todoList">
   </div>
   <!-- end of todo list -->
+
+  <!-- add form -->
+  <div id="add" class="mt-5">
+    <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;">
+      <label for="add-todo" class="form-label ms-auto me-auto mt-2 mb-2 px-2">Add Todo</label>
+      <form id="formAddTodo" class="mb-3">
+        <div class="mb-3 px-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="inputTitle">
+        </div>
+        <div class="mb-3 px-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="inputDescription" rows="2"></textarea>
+        </div>
+        <div class="mb-3 px-3">
+          <label for="status" class="form-label">Status</label>
+          <input type="text" class="form-control" id="inputStatus">
+        </div>
+        <div class="mb-3 px-3">
+          <label for="due_date" class="form-label">Due Date</label>
+          <input type="date" class="form-control" id="inputDueDate">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-2" id="addSubmit">Add</button>
+          <button type="button" class="btn btn-warning mt-2" onClick="cancel()">Cancel</button>
+        </div>
+      </form>
+    </div> 
+  </div>
+  <!-- end of add form -->
+
+  <!-- edit form -->
+  <div id="edit" class="mt-5">
+    <div class="card border-primary mt-3 mb-3 ms-auto me-auto" style="max-width: 18rem;">
+      <label for="edit-todo" class="form-label ms-auto me-auto mt-2 mb-2 px-2">Edit Todo</label>
+      <form id="formEditTodo" class="mb-3">
+        <div class="mb-3 px-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="editTitle">
+        </div>
+        <div class="mb-3 px-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="editDescription" rows="2"></textarea>
+        </div>
+        <div class="mb-3 px-3">
+          <label for="status" class="form-label">Status</label>
+          <input type="text" class="form-control" id="editStatus">
+        </div>
+        <div class="mb-3 px-3">
+          <label for="due_date" class="form-label">Due Date</label>
+          <input type="date" class="form-control" id="editDueDate">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-2" id="editSubmit">Update</button>
+          <button type="button" class="btn btn-warning mt-2" onClick="cancel()">Cancel</button>
+        </div>
+      </form>
+    </div> 
+  </div>
+  <!-- end of edit form -->
     
 
   <script 
