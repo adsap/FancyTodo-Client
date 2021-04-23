@@ -31,6 +31,7 @@ $(document).ready(() => {
   $('#navLogout').click((e) => {
     e.preventDefault();
     logout();
+    signOut();
   });
 
   $('#formLogin').on('submit', (e) => {
@@ -348,5 +349,37 @@ const cancel = () => {
   $('#add').hide();
   $('#edit').hide();
   getTodos()
+}
+
+function onSignIn(googleUser) {
+  const id_token = googleUser.getAuthResponse().id_token;
+
+  $.ajax({
+    method: 'POST',
+    url: 'http://localhost:3000/users/googlelogin',
+    data: {
+      google_token: id_token
+    }
+  })
+    .done((data) => {
+      const { access_token } = data;
+      localStorage.setItem('access_token', access_token);
+      $('#inputEmailLogin').val("")
+      $('#inputPasswordLogin').val("");
+    })
+    .fail((err) => {
+      const { errors } = err.responseJSON;
+    })
+    .always(() => {
+      checkIsLoggedIn();
+      $('#add').hide();
+    });
+}
+
+function signOut() {
+  let auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
 }
 
