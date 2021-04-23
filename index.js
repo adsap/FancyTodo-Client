@@ -6,6 +6,17 @@ $(document).ready(() => {
     $('#login').hide();
     $('#register').show();
     $('#todoList').hide();
+    $('#inputEmailRegister').val("")
+    $('#inputPasswordRegister').val("");
+  });
+
+  $('#signup').click((e) => {
+    e.preventDefault();
+    $('#login').hide();
+    $('#register').show();
+    $('#todoList').hide();
+    $('#inputEmailRegister').val("")
+    $('#inputPasswordRegister').val("");
   });
 
   $('#navLogin').click((e) => {
@@ -13,6 +24,8 @@ $(document).ready(() => {
     $('#login').show();
     $('#register').hide();
     $('#todoList').hide();
+    $('#inputEmailLogin').val("")
+    $('#inputPasswordLogin').val("");
   });
 
   $('#navLogout').click((e) => {
@@ -53,7 +66,21 @@ $(document).ready(() => {
     $('#edit').hide();
   });
 
+  $('#show-password-login').click(function() {
+    if ($(this).is(':checked')){
+     $('#inputPasswordLogin').attr('type','text');
+    } else {
+     $('#inputPasswordLogin').attr('type','password');
+    }
+  });
 
+   $('#show-password-register').click(function() {
+    if ($(this).is(':checked')){
+     $('#inputPasswordRegister').attr('type','text');
+    } else {
+     $('#inputPasswordRegister').attr('type','password');
+    }
+  });
 })
 
 const checkIsLoggedIn = () => {
@@ -79,6 +106,10 @@ const checkIsLoggedIn = () => {
     $('#btn-add-todo').hide();
     $('#add').hide();
     $('#edit').hide();
+    $('#inputEmailRegister').val("")
+    $('#inputPasswordRegister').val("");
+    $('#inputEmailLogin').val("")
+    $('#inputPasswordLogin').val("");
 
     clearTodos();
   }
@@ -127,15 +158,37 @@ const getTodos = () => {
     .done((todos) => {
       $('#todoList').empty();
       todos.data.forEach((todo) => {
+        let todoDate = new Date(todo.due_date)
+        // $('#todoList').append(`
+        // <div class="card text-center mt-3 mx-auto" style="width: 18rem">
+        //   <div class="card-body">
+        //     <h5 class="card-title">${todo.title}</h5>
+        //     <p class="card-text">
+        //       ${todo.description}
+        //     </p>
+        //     <button type="button" class="btn btn-warning" onClick="getEditTodo(${todo.id})">Edit</button>
+        //     <button type="button" class="btn btn-danger" onClick="deleteTodo(${todo.id})">Delete</button>
+        //   </div>
+        // </div>
+        // `);
         $('#todoList').append(`
-        <div class="card text-center mt-3 mx-auto" style="width: 18rem">
-          <div class="card-body">
-            <h5 class="card-title">${todo.title}</h5>
-            <p class="card-text">
-              ${todo.description}
-            </p>
-            <button type="button" class="btn btn-warning" onClick="getEditTodo(${todo.id})">Edit</button>
-            <button type="button" class="btn btn-danger" onClick="deleteTodo(${todo.id})">Delete</button>
+        <div class="card text-center mt-3 mx-auto" id="todosCard">
+          <div class="card-header" id="heading${todo.id}">
+            <h2 class="mb-0">
+              <button class="btn btn-link collapsed text-white" type="button" data-toggle="collapse" data-target="#collapse${todo.id}" aria-expanded="false" aria-controls="collapse${todo.id}">
+              ${todo.title}
+              </button>
+            </h2>
+          </div>
+      
+          <div id="collapse${todo.id}" class="collapse" aria-labelledby="heading${todo.id}" data-parent="#todoList">
+            <div class="card-body text-center mt-3 mx-auto" style="width: 18rem"">
+              <p>${todo.description}</p>
+              <p>${todo.status}</p>
+              <p>${todoDate.toISOString().split('T')[0]}</p>
+              <button type="button" class="btn btn-warning btn-sm rounded-pill" onClick="getEditTodo(${todo.id})">Edit</button>
+              <button type="button" class="btn btn-danger btn-sm rounded-pill" onClick="deleteTodo(${todo.id})">Delete</button>
+            </div>
           </div>
         </div>
         `);
