@@ -133,9 +133,15 @@ const login = () => {
       localStorage.setItem('access_token', access_token);
       $('#inputEmailLogin').val("")
       $('#inputPasswordLogin').val("");
+      Toastify({
+        text: "Successfully Login",
+        duration: 2000,
+        backgroundColor: "#07bc0c",
+      }).showToast();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to login", errors.join(', '), "error");
     })
     .always(() => {
       checkIsLoggedIn();
@@ -146,6 +152,11 @@ const login = () => {
 const logout = () => {
   localStorage.removeItem('access_token');
   checkIsLoggedIn();
+  Toastify({
+    text: "Successfully Logout",
+    duration: 2000,
+    backgroundColor: "#3498db",
+  }).showToast();
 };
 
 const getTodos = () => {
@@ -173,7 +184,7 @@ const getTodos = () => {
         // </div>
         // `);
         $('#todoList').append(`
-        <div class="card text-center mt-3 mx-auto" id="todosCard">
+        <div class="card text-center mt-3 mb-3 mx-auto" id="todosCard">
           <div class="card-header" id="heading${todo.id}">
             <h2 class="mb-0">
               <button class="btn btn-link collapsed text-white" type="button" data-toggle="collapse" data-target="#collapse${todo.id}" aria-expanded="false" aria-controls="collapse${todo.id}">
@@ -183,12 +194,12 @@ const getTodos = () => {
           </div>
       
           <div id="collapse${todo.id}" class="collapse" aria-labelledby="heading${todo.id}" data-parent="#todoList">
-            <div class="card-body text-center mt-3 mx-auto" style="width: 18rem"">
-              <p>${todo.description}</p>
-              <p>${todo.status}</p>
-              <p>${todoDate.toISOString().split('T')[0]}</p>
-              <button type="button" class="btn btn-warning btn-sm rounded-pill" onClick="getEditTodo(${todo.id})">Edit</button>
-              <button type="button" class="btn btn-danger btn-sm rounded-pill" onClick="deleteTodo(${todo.id})">Delete</button>
+            <div class="card-body text-center mx-auto" style="width: 18rem">
+              <p><button type="button" class="btn" onClick="getStatusTodo(${todo.id})"><i class="fa fa-home"></i></button> ${todo.status}</p>
+              <p><i class="far fa-folder"></i> ${todoDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}</p>
+              <button type="button" class="btn btn-warning btn-sm rounded-pill" onClick="getEditTodo(${todo.id})" style="width: 70px">Edit</button>
+              <button type="button" class="btn btn-dark btn-sm rounded-pill" onClick="viewTodo(${todo.id})" style="width: 70px">View</button>
+              <button type="button" class="btn btn-danger btn-sm rounded-pill" onClick="deleteTodo(${todo.id})" style="width: 70px">Delete</button>
             </div>
           </div>
         </div>
@@ -196,7 +207,8 @@ const getTodos = () => {
       });
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to show list todo", errors.join(', '), "error");
     })
     .always(() => {
       $('#add').hide();
@@ -223,13 +235,19 @@ const register = () => {
     .done(() => {
       $('#inputEmailRegister').val("")
       $('#inputPasswordRegister').val("");
+      checkIsLoggedIn();
+      Toastify({
+        text: "Registration Success",
+        duration: 2000,
+        backgroundColor: "#07bc0c",
+      }).showToast();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to register user", errors.join(', '), "error");
+      $('#login').hide();
+      $('#register').show();
     })
-    .always(() => {
-      checkIsLoggedIn();
-    });
 }
 
 const addTodo = () => {
@@ -257,9 +275,15 @@ const addTodo = () => {
       $('#inputStatus').val("");
       $('#inputDueDate').val("");
       getTodos()
+      Toastify({
+        text: "Successfully add new todo",
+        duration: 2000,
+        backgroundColor: "#07bc0c",
+      }).showToast();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to add todo", errors.join(', '), "error");
     })
 }
 
@@ -283,7 +307,8 @@ const getEditTodo = (id) => {
       $('#btn-add-todo').hide();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to show data todo", errors.join(', '), "error");
     })
 }
 
@@ -313,9 +338,94 @@ const editTodo = () => {
       $('#editStatus').val("");
       $('#editDueDate').val("");
       getTodos()
+      Toastify({
+        text: "Successfully update todo",
+        duration: 2000,
+        backgroundColor: "#f1c40f",
+      }).showToast();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to update todo", errors.join(', '), "error");
+    })
+}
+
+const getStatusTodo = (id) => {
+  $.ajax({
+    method: 'GET',
+    url: `http://localhost:3000/todos/${id}`,
+    headers: {
+      access_token: localStorage.getItem('access_token'),
+    }
+  })
+    .done((todo) => {
+      localStorage.setItem('todo-id', id);
+      $('#updateStatus').val(todo.data.status);
+      $("#statusModal").modal('show');
+      // $('#todoList').hide();
+      // $('#edit').show();
+      // $('#btn-add-todo').hide();
+    })
+    .fail((err) => {
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to show status todo", errors.join(', '), "error");
+    })
+}
+
+const updateStatusTodo = () => {
+  const id = localStorage.getItem('todo-id')
+  let status = $('#updateStatus').val();
+
+  $.ajax({
+    method: 'PATCH',
+    url: `http://localhost:3000/todos/${id}`,
+    headers: {
+      access_token: localStorage.getItem('access_token'),
+    },
+    data: {
+      status
+    }
+  })
+    .done(() => {
+      $("#statusModal").modal('hide');
+      getTodos()
+      Toastify({
+        text: "Successfully change status todo",
+        duration: 2000,
+        backgroundColor: "#f1c40f",
+      }).showToast();
+    })
+    .fail((err) => {
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to change status todo", errors.join(', '), "error");
+    })
+}
+
+const viewTodo = (id) => {
+  $.ajax({
+    method: 'GET',
+    url: `http://localhost:3000/todos/${id}`,
+    headers: {
+      access_token: localStorage.getItem('access_token'),
+    }
+  })
+    .done((todo) => {
+      let createdDate = new Date(todo.data.createdAt)
+      let todoDate = new Date(todo.data.due_date)
+      $('#viewCreatedDate').text(`Created Date : ${createdDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}`);
+      $('#viewTitle').text(`Title : ${todo.data.title}`);
+      $('#viewDescription').text(`Description : ${todo.data.description}`);
+      $('#viewStatus').text(`Status : ${todo.data.status}`);
+      $('#viewDueDate').text(`Due Date : ${todoDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}`);
+      // $('#todoList').hide();
+      // $('#view').show();
+      // $('#edit').hide();
+      // $('#btn-add-todo').hide();
+      $("#todoModal").modal('show');
+    })
+    .fail((err) => {
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to view todo", errors.join(', '), "error");
     })
 }
 
@@ -329,9 +439,15 @@ const deleteTodo = (id) => {
   })
     .done(() => {
       getTodos()
+      Toastify({
+        text: "Succesfully delete todo",
+        duration: 2000,
+        backgroundColor: "#e74c3c",
+      }).showToast();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to delete todo", errors.join(', '), "error");
     })
 }
 
@@ -366,9 +482,15 @@ function onSignIn(googleUser) {
       localStorage.setItem('access_token', access_token);
       $('#inputEmailLogin').val("")
       $('#inputPasswordLogin').val("");
+      Toastify({
+        text: "Successfully Sign in with Google",
+        duration: 2000,
+        backgroundColor: "#07bc0c",
+      }).showToast();
     })
     .fail((err) => {
-      const { errors } = err.responseJSON;
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to sign in with google", errors.join(', '), "error");
     })
     .always(() => {
       checkIsLoggedIn();
