@@ -25,18 +25,15 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
+        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
           <li class="nav-item" id="navRegister">
-            <a class="nav-link" href="#">Register</a>
+            <a class="nav-link" style="color: wheat;" href="#">Register</a>
           </li>
           <li class="nav-item" id="navLogin">
-            <a class="nav-link" href="#">Login</a>
+            <a class="nav-link" style="color: wheat;" href="#">Login</a>
           </li>
           <li class="nav-item" id="navLogout">
-            <a class="nav-link" href="#">Logout</a>
+            <a class="nav-link" style="color: wheat;" href="#">Logout</a>
           </li>
       </div>
     </div>
@@ -46,7 +43,7 @@
   <!-- login form -->
   <div id="login" class="mt-5">
     <div class="card border-secondary mt-3 mb-3 mx-auto" id="loginCard">
-      <label for="login" class="form-label mx-auto mt-2 mb-2 px-2">Login</label>
+      <label for="login" class="form-label mx-auto mt-2 mb-4 px-2">Login</label>
       <form id="formLogin" class="mb-3">
         <div class="mb-3 px-3">
           <label for="email-address" class="form-label">Email address</label>
@@ -82,7 +79,7 @@
   <!-- register form -->
   <div id="register" class="mt-5">
     <div class="card border-secondary mt-3 mb-3 mx-auto" id="registerCard">
-      <label for="register" class="form-label mx-auto mt-2 mb-2 px-2">Register</label>
+      <label for="register" class="form-label mx-auto mt-2 mb-4 px-2">Register</label>
       <form id="formRegister" class="mb-3">
         <div class="mb-3 px-3">
           <label for="email-address" class="form-label">Email address</label>
@@ -98,10 +95,22 @@
         <div class="col-md-12 text-center">
           <button type="submit" class="btn btn-primary mt-2 rounded-pill" id="registerSubmit">Register</button>
         </div>
+        <div class="col-md-12 ">
+          <div class="login-or">
+             <hr class="hr-or">
+             <span class="span-or">or</span>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <div class="g-signin2" data-onsuccess="onSignUp" data-theme="light" data-longtitle="true"></div>
+        </div>
+        <div class="form-group">
+            <p class="text-center" id="signin">Already have an account? <a href="#">Login here</a></p>
+        </div>
       </form>
     </div> 
   </div>
-  <!-- end of login form -->
+  <!-- end of register form -->
 
   <!-- button add todo -->
   <div class="text-center">
@@ -135,7 +144,7 @@
           <div>
             <select class="form-select" aria-label="Default select example" style="width:100%;padding:8px 2px" id="inputStatus">
               <option value="" selected>Select Status</option>
-              <option value="Queued">Queued</option>
+              <option value="Waiting">Waiting</option>
               <option value="Running">Running</option>
             </select>
           </div>
@@ -170,8 +179,7 @@
           <label for="status" class="form-label">Status</label>
           <div>
             <select class="form-select" aria-label="Default select example" style="width:100%;padding:8px 2px" id="editStatus">
-              <option value="" selected>Select Status</option>
-              <option value="Queued">Queued</option>
+              <option value="Waiting">Waiting</option>
               <option value="Running">Running</option>
               <option value="Completed">Completed</option>
               <option value="Delayed">Delayed</option>
@@ -229,7 +237,7 @@
 
   <!-- status modal -->
   <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Update Status</h5>
@@ -239,9 +247,8 @@
         </div>
         <div class="modal-body">
           <div>
-            <select class="form-select" aria-label="Default select example" style="padding:8px 2px" id="updateStatus">
-              <option value="" selected>Select Status</option>
-              <option value="Queued">Queued</option>
+            <select class="form-select" aria-label="Default select example" style="width:100%;padding:8px 2px" id="updateStatus">
+              <option value="Waiting">Waiting</option>
               <option value="Running">Running</option>
               <option value="Completed">Completed</option>
               <option value="Delayed">Delayed</option>
@@ -253,9 +260,32 @@
           <button type="button" class="btn btn-primary" onClick="updateStatusTodo()">Update</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
+      </div>
     </div>
   </div>
   <!-- end of status modal -->
+
+  <!-- delete modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure want to delete this ?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" onClick="deleteTodo()">Yes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end of delete modal -->
 
   <!-- <script 
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" 

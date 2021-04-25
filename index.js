@@ -19,6 +19,15 @@ $(document).ready(() => {
     $('#inputPasswordRegister').val("");
   });
 
+  $('#signin').click((e) => {
+    e.preventDefault();
+    $('#login').show();
+    $('#register').hide();
+    $('#todoList').hide();
+    $('#inputEmailLogin').val("")
+    $('#inputPasswordLogin').val("");
+  });
+
   $('#navLogin').click((e) => {
     e.preventDefault();
     $('#login').show();
@@ -195,11 +204,11 @@ const getTodos = () => {
       
           <div id="collapse${todo.id}" class="collapse" aria-labelledby="heading${todo.id}" data-parent="#todoList">
             <div class="card-body text-center mx-auto" style="width: 18rem">
-              <p><button type="button" class="btn" onClick="getStatusTodo(${todo.id})"><i class="fa fa-home"></i></button> ${todo.status}</p>
-              <p><i class="far fa-folder"></i> ${todoDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}</p>
+              <p>${todo.status}<button type="button" class="btn" onClick="getStatusTodo(${todo.id})"><i class="fas fa-pencil-alt"></i></button></p>
+              <p><i class="far fa-calendar-alt"></i> ${todoDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}</p>
               <button type="button" class="btn btn-warning btn-sm rounded-pill" onClick="getEditTodo(${todo.id})" style="width: 70px">Edit</button>
               <button type="button" class="btn btn-dark btn-sm rounded-pill" onClick="viewTodo(${todo.id})" style="width: 70px">View</button>
-              <button type="button" class="btn btn-danger btn-sm rounded-pill" onClick="deleteTodo(${todo.id})" style="width: 70px">Delete</button>
+              <button type="button" class="btn btn-danger btn-sm rounded-pill" onClick="getDeleteTodo(${todo.id})" style="width: 70px">Delete</button>
             </div>
           </div>
         </div>
@@ -245,8 +254,8 @@ const register = () => {
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
       swal("Failed to register user", errors.join(', '), "error");
-      $('#login').hide();
-      $('#register').show();
+      // $('#login').hide();
+      // $('#register').show();
     })
 }
 
@@ -284,6 +293,9 @@ const addTodo = () => {
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
       swal("Failed to add todo", errors.join(', '), "error");
+      $('#btn-add-todo').hide();
+      $('#todoList').hide();
+      $('#add').show();
     })
 }
 
@@ -347,6 +359,9 @@ const editTodo = () => {
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
       swal("Failed to update todo", errors.join(', '), "error");
+      $('#todoList').hide();
+      $('#edit').show();
+      $('#btn-add-todo').hide();
     })
 }
 
@@ -429,7 +444,26 @@ const viewTodo = (id) => {
     })
 }
 
-const deleteTodo = (id) => {
+const getDeleteTodo = (id) => {
+  $.ajax({
+    method: 'GET',
+    url: `http://localhost:3000/todos/${id}`,
+    headers: {
+      access_token: localStorage.getItem('access_token'),
+    }
+  })
+    .done(() => {
+      localStorage.setItem('todo-id', id);
+      $("#deleteModal").modal('show');
+    })
+    .fail((err) => {
+      const errors = err.responseJSON.errorMessages;
+      swal("Failed to show todo", errors.join(', '), "error");
+    })
+}
+
+const deleteTodo = () => {
+  const id = localStorage.getItem('todo-id')
   $.ajax({
     method: 'DELETE',
     url: `http://localhost:3000/todos/${id}`,
@@ -438,6 +472,7 @@ const deleteTodo = (id) => {
     }
   })
     .done(() => {
+      $("#deleteModal").modal('hide');
       getTodos()
       Toastify({
         text: "Succesfully delete todo",
@@ -467,6 +502,36 @@ const cancel = () => {
   getTodos()
 }
 
+function onSignUp(googleUser) {
+  const id_token = googleUser.getAuthResponse().id_token;
+
+  $.ajax({
+    method: 'POST',
+    url: 'http://localhost:3000/users/googleregister',
+    data: {
+      google_token: id_token
+    }
+  })
+    .done((data) => {
+      const { access_token } = data;
+      localStorage.setItem('access_token', access_token);
+      $('#inputEmailRegister').val("")
+      $('#inputPasswordRegister').val("");
+      checkIsLoggedIn();
+      Toastify({
+        text: "Successfully Sign up with Google",
+        duration: 2000,
+        backgroundColor: "#07bc0c",
+      }).showToast();
+    })
+    .fail((err) => {
+      const errors = err.responseJSON.errorMessages;
+      swal("Registration Failed", errors.join(', '), "error");
+      // $('#login').sh();
+      // $('#register').show();
+    })
+}
+
 function onSignIn(googleUser) {
   const id_token = googleUser.getAuthResponse().id_token;
 
@@ -490,7 +555,7 @@ function onSignIn(googleUser) {
     })
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
-      swal("Failed to sign in with google", errors.join(', '), "error");
+      swal("Google login failed", errors.join(', '), "error");
     })
     .always(() => {
       checkIsLoggedIn();
