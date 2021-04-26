@@ -180,21 +180,9 @@ const getTodos = () => {
       $('#todoList').empty();
       todos.data.forEach((todo) => {
         let todoDate = new Date(todo.due_date)
-        // $('#todoList').append(`
-        // <div class="card text-center mt-3 mx-auto" style="width: 18rem">
-        //   <div class="card-body">
-        //     <h5 class="card-title">${todo.title}</h5>
-        //     <p class="card-text">
-        //       ${todo.description}
-        //     </p>
-        //     <button type="button" class="btn btn-warning" onClick="getEditTodo(${todo.id})">Edit</button>
-        //     <button type="button" class="btn btn-danger" onClick="deleteTodo(${todo.id})">Delete</button>
-        //   </div>
-        // </div>
-        // `);
         $('#todoList').append(`
         <div class="card text-center mt-3 mb-3 mx-auto" id="todosCard">
-          <div class="card-header" id="heading${todo.id}">
+          <div class="card-header" style="background-color: teal;" id="heading${todo.id}">
             <h2 class="mb-0">
               <button class="btn btn-link collapsed text-white" type="button" data-toggle="collapse" data-target="#collapse${todo.id}" aria-expanded="false" aria-controls="collapse${todo.id}">
               ${todo.title}
@@ -203,7 +191,7 @@ const getTodos = () => {
           </div>
       
           <div id="collapse${todo.id}" class="collapse" aria-labelledby="heading${todo.id}" data-parent="#todoList">
-            <div class="card-body text-center mx-auto" style="width: 18rem">
+            <div class="card-body text-center mx-auto" style="width: 18rem;">
               <p>${todo.status}<button type="button" class="btn" onClick="getStatusTodo(${todo.id})"><i class="fas fa-pencil-alt"></i></button></p>
               <p><i class="far fa-calendar-alt"></i> ${todoDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}</p>
               <button type="button" class="btn btn-warning btn-sm rounded-pill" onClick="getEditTodo(${todo.id})" style="width: 70px">Edit</button>
@@ -254,8 +242,6 @@ const register = () => {
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
       swal("Failed to register user", errors.join(', '), "error");
-      // $('#login').hide();
-      // $('#register').show();
     })
 }
 
@@ -377,9 +363,6 @@ const getStatusTodo = (id) => {
       localStorage.setItem('todo-id', id);
       $('#updateStatus').val(todo.data.status);
       $("#statusModal").modal('show');
-      // $('#todoList').hide();
-      // $('#edit').show();
-      // $('#btn-add-todo').hide();
     })
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
@@ -432,10 +415,6 @@ const viewTodo = (id) => {
       $('#viewDescription').text(`Description : ${todo.data.description}`);
       $('#viewStatus').text(`Status : ${todo.data.status}`);
       $('#viewDueDate').text(`Due Date : ${todoDate.toISOString().replace(/T.*/,'').split('-').reverse().join('-')}`);
-      // $('#todoList').hide();
-      // $('#view').show();
-      // $('#edit').hide();
-      // $('#btn-add-todo').hide();
       $("#todoModal").modal('show');
     })
     .fail((err) => {
@@ -527,8 +506,6 @@ function onSignUp(googleUser) {
     .fail((err) => {
       const errors = err.responseJSON.errorMessages;
       swal("Registration Failed", errors.join(', '), "error");
-      // $('#login').sh();
-      // $('#register').show();
     })
 }
 
