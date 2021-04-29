@@ -4,15 +4,17 @@ body {
 }
 
 #loginCard {
+  margin: 20px;
+  padding: 20px;
   border: 1px solid;
-  border-radius: 25px;
   width: 20rem;
   height: 30rem;
 }
 
 #registerCard {
+  margin: 20px;
+  padding: 20px;
   border: 1px solid;
-  border-radius: 25px;
   width: 20rem;
   height: 30rem;
 }
@@ -25,13 +27,15 @@ body {
 }
 
 #addCard {
-  border-radius: 10px;
-  background-color: lightskyblue;
+  margin: 15px;
+  padding: 15px;
+  border: 1px solid;
 }
 
 #editCard {
-  border-radius: 10px;
-  background-color: lightsteelblue;
+  margin: 15px;
+  padding: 15px;
+  border: 1px solid;
 }
 
 #loginSubmit {
